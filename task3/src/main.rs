@@ -19,13 +19,19 @@ struct FilterCondition<T> {
     value: T,
 }
 
-impl<T: PartialEq> FilterCondition<T> {
+impl<T> FilterCondition<T>
+where
+    T: PartialEq + PartialOrd,
+{
     fn is_match(&self, item: &T) -> bool {
         &self.value == item
     }
 }
 
-fn custom_filter<T: PartialEq>(vector: Vec<T>, cond: &FilterCondition<T>) -> Vec<T> {
+fn custom_filter<T>(vector: Vec<T>, cond: &FilterCondition<T>) -> Vec<T>
+where
+    T: PartialEq + PartialOrd,
+{
     let new_vector: Vec<T> = vector
         .into_iter()
         .filter(|item| cond.is_match(item))
